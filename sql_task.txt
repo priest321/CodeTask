@@ -1,0 +1,100 @@
+
+SELECT teams.team_id, teams.team_name, host_goals, guest_goals,
+case when host_goals>1
+then 'Win'
+when host_goals=1
+then 'Draw'
+else 'Loss'
+end as goal_text
+from matches
+inner join teams
+on teams.team_id=matches.host_team
+order by host_goals desc;
+
+____________________________________
+
+teams:
+
+   team_id | team_name
+  ---------+---------------
+   10      | Give
+   20      | Never
+   30      | You
+   40      | Up
+   50      | Gonna
+
+
+  matches:
+
+   match_id | host_team | guest_team | host_goals | guest_goals
+  ----------+-----------+------------+------------+-------------
+   1        | 30        | 20         | 1          | 0
+   2        | 10        | 20         | 1          | 2
+   3        | 20        | 50         | 2          | 2
+   4        | 10        | 30         | 1          | 0
+   5        | 30        | 50         | 0          | 1
+
+your query should return:
+   team_id | team_name | num_points
+  ---------+-----------+------------
+   20      | Never     | 4
+   50      | Gonna     | 4
+   10      | Give      | 3
+   30      | You       | 3
+   40      | Up        | 0
+___________________________________________________________
+
+create view guest as select guest_team, sum(guest_goals) as guest_sum from matches group by guest_team;
+
+guest 
+
++----+---+
+| 30 | 0 |
+| 20 | 2 |
+| 50 | 3 |
++----+---+
+create view host as select host_team, sum(host_goals) as host_sum from matches group by host_team;
+
+
+host 
++----+---+
+| 30 | 1 |
+| 20 | 2 |
+| 10 | 2 |
++----+---+
+
+
+create view num_point as select host_team as value, host_sum as point_sum 
+from host union all select guest_team as value, guest_sum as point_sum from guest;
+
++----+---+
+| 30 | 1 |
+| 20 | 2 |
+| 10 | 2 |
+| 30 | 0 |
+| 20 | 2 |
+| 50 | 3 |
++----+---+
+
+
+create view final_point as select value, sum(point_sum) as total_count from num_point group by value order by total_count desc;
+
++----+---+
+| 20 | 4 |
+| 50 | 3 |
+| 10 | 2 |
+| 30 | 1 |
++----+---+
+
+select team_id, team_name, coalesce(final_point.total_count, 0) as num_points from teams left join final_point on value=team_id;
+
++----+-------+---+
+| 20 | Never | 4 |
+| 50 | Gonna | 3 |
+| 10 |  Give | 2 |
+| 30 |   You | 1 |
+| 40 |    Up | 0 |
++----+-------+---+
+
+
+

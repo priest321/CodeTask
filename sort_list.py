@@ -18,5 +18,5 @@ def sort_list(data: list):
     print(data)
     return data
 
-assert sort_list([1,2,3,4,5,9,8,7,6,4,5,4,3,2,1])
+assert sort_list([1,2,5,4,3,2,1]) == [1,1,2,2,3,4,5]
 

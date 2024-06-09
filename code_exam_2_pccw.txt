@@ -1,0 +1,438 @@
+"""
+
+TECHNICAL EVALUATION
+@ConsoleConnect
+
+[NOTE: Your time is important to us and we don't want to waste it!
+this evaluation DOES NOT require huge amounts of code.]
+
+
+HOW IT WORKS:
+=============
+- There are 8 questions in this file. Each question is a function.
+  The questions are very short!
+
+- The questions are NOT trick questions, and they are NOT
+  unrealistic puzzles.
+
+- You must provide your answers inside the body of each question (see
+  more below).
+
+- This file is a Python program. You are expected to run it while testing
+  your solutions. Most questions have tests (assert statements) embedded
+  inside. In general, you will have to modify some code to make a test
+  pass, or modify some code without breaking tests.
+
+- Each task is completely self-contained. You can do them in any order.
+
+- Inside each question, you must submit your response inside sections
+  marked:
+
+    # --------------------- ANSWER ----------------------------
+
+                        <---- Your answer goes here.
+
+    # =========================================================
+
+  You should only make code changes inside these marked areas. An exception
+  is the logging level, which you may want to change depending on how
+  much detail you want to see.
+
+- Each question usually has one ANSWER section for code, and a separate
+  ANSWER section for some (brief!) discussion.  The discussion section
+  is important, but you are not expected to write a lot!  As rough
+  guideline, if you find yourself going over ~150 words in any one
+  particular discussion section, that might be too much. Be specific!
+
+
+KEEP IN MIND
+============
+
+
+- The questions are intended to evaluate your knowledge and
+  thinking, not how fast you can write code.
+
+- Very small amounts of code (or changes) are required. Often it
+  will just be one or two added or changed lines. You do NOT have
+  to write a lot of code. It should not be time-consuming at all.
+  Your time is important to us and we don't want to waste it.
+
+- This is an evaluation, NOT AN EXAM. There is no "pass mark". We
+  want to get a rough idea of your depth of knowledge, which ALSO
+  MEANS...
+
+- The discussion sections in each question are as important as the
+  code sections. But you are not expected to write a lot!  We are
+  looking for clarity and simplicity in your explanation, not
+  quantity.
+
+- If you don't understand the question, or the code exercise, make
+  sure to use the discussion section to say that, and then say how
+  you WOULD go about solving the problem if it came up in your work.
+
+- We EXPECT that you may not be able to do all the questions,
+  and that's ok. This happens in real life too. Give us an
+  idea of how you would deal with that in a real situation.
+
+"""
+
+
+# Ignore this stuff -> go down to "TEST BEGINS HERE" and get started
+# on the first question!
+import time
+from collections import OrderedDict
+import threading
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('evaluation')
+questions = OrderedDict()
+
+
+def addquestion(f):
+    questions[f.__name__] = f
+
+    def inner(*args, **kwargs):
+        return f(*args, **kwargs)
+    return inner
+
+
+####################### TEST BEGINS HERE #####################################
+
+@addquestion
+def question_1():
+    """ Unexpected behaviour:
+
+    The code below creates functions in a loop, and puts all these new functions into a list.
+    Unfortunately, when we call the functions the results are incorrect. Fix the answer so that the
+    test passes.
+    """
+
+    # --------------------- ANSWER -------------------------------------------
+    funcs = []
+    for i in range(10):
+        # Put a new function into the list on every loop
+        def f(i=i):
+            return i
+        funcs.append(f)
+    # ========================================================================
+    # TEST
+    assert [_() for _ in funcs] == list(range(10))
+    # Discussion:
+    # - How would you guide, or give general advice to team members to avoid this kind of error?
+    # --------------------- ANSWER -------------------------------------------
+    # the issue with the code is that all the functions will return value of i at the end of 
+    # loop, which is 9, to solve this problem should assign the default argument in the function
+    # that capture the current values of i. To guild team member, we should use functools.partial or lambda
+    # function in similar situations
+    # ========================================================================
+
+
+@addquestion
+def question_2():
+    """ Comprehensions:
+
+    Fill in the body of the function `using_comprehension()` so that it does the same thing as the
+    existing function `using_loops`. The aim of the task is to evaluate how easily you can move
+    between the two forms of iteration.
+    """
+
+    def using_loops():
+        result = []
+        for i in range(10):
+            if i % 3:
+                continue
+            for j in range(10):
+                if j % 5:
+                    continue
+                result.append(i*j)
+        return result
+
+    # --------------------- ANSWER -------------------------------------------
+    def using_comprehensions():
+        # Use only a comprehension, e.g., # return [x for x in list <etc.>]
+        # Modify the line below by filling in the list comprehension "[   ]".
+        return [(i*j) for i in range(10) if not i % 3 for j in range(10) if not j % 5]
+    # ========================================================================
+
+    logger.debug(using_loops())
+    logger.debug(using_comprehensions())
+
+    assert using_loops() == using_comprehensions()
+
+    # Discussion:
+    # - What are your thoughts on when to use loops or comprehensions?
+    # - For the SPECIFIC task above, discuss which method might be preferred and why.
+    # --------------------- ANSWER -------------------------------------------
+    # Comprehensions is easy to read and performed into a single line  
+    # Comprehensions The performance is usually faster compare to a loop
+    # Comprehensions is good for a simple task and logic but got some disadvantage when debugging it (like not able to print for each steps).
+    # loops is use for complex logic, it break down the steps and easy for debugging
+    # ========================================================================
+
+
+@addquestion
+def question_3():
+    """ The assertion fails.  Fix the code so that the assertion pass.
+
+    The fix is easy, but for this question the discussion section is more important.
+    """
+
+    def query(id):
+        """ This is a fake database call just to generate some data. """
+        return dict(
+            name='Jane Smith', age=23, balance=-100, active=True, number='555-5555',
+            address='1 Sparkle Road'
+        )
+
+    # --------------------- ANSWER -------------------------------------------
+    def get_customer_balance(customer_id):
+        data = query(customer_id)
+        return data.get('name', "name missing"), data.get('balance', "default vlaue"), data.get('address', 'address not available'), data.get('active', False)
+
+    balance = get_customer_balance(customer_id=12345)[1]
+    # ========================================================================
+
+    assert balance == -100
+    # Discussion:
+    # - How would you propose to minimize this KIND of errors.
+    # - Discuss some language or stdlib features, if any, that might help to prevent or minimize
+    # this kind of error.
+    # --------------------- ANSWER -------------------------------------------
+    # Use keyword rather then magic number for index like 0,1 -> balance = 1, name = 0
+    # Return by index is not a good approach because when someone editing the code may changing the orders 
+    # We should either return each data like get_name, get_balance or return a dictionary like {"name": "Jane", "balance": -100} for future data access.
+    # data['name'] also easy trigger key error when database missing this type of data use data.get("name", "with some default name") to avoid key error and easy for debug
+    # ========================================================================
+
+
+@addquestion
+def question_4():
+    """ Passing data between threads.
+
+    The design below appears to work, but several problems were reported at code review. The
+    consumer thread doesn't even shut down correctly:
+    it becomes a zombie, and only dies when the entire process exits.
+
+    See if you can improve the design, as well as make the tests pass.
+
+    The goal is to demonstrate a simple, but robust design to pass data from one thread to another
+    (and then briefly discuss your design).
+    """
+
+    # --------------------- ANSWER -------------------------------------------
+    data = ["End"]
+    
+    def producer():
+        # This job will run it its own thread
+        for i in range(10):
+            data.append('x')
+            time.sleep(0.01)
+
+    def consumer():
+        # This job will run in its own thread
+        while True:
+            if data:
+                consumed = data.pop()
+                if consumed == "End":
+                   break
+                logger.debug(consumed)
+
+    # ========================================================================
+    thread1 = threading.Thread(target=producer)
+    thread1.daemon = True
+    thread1.start()
+
+    thread2 = threading.Thread(target=consumer)
+    thread2.daemon = True
+    thread2.start()
+
+    thread1.join(timeout=1)
+    thread2.join(timeout=1)
+
+    assert not thread1.is_alive(), 'Thread 1 is a zombie!'
+    assert not thread2.is_alive(), 'Thread 2 is a zombie!'
+
+    # Discussion:
+    # - What kind of problems did you see in the original design?
+    # - How (briefly) would you approach writing code with threads in Python?
+    # - Multiple threads or multiple processes? What influences the choice for you?
+    # --------------------- ANSWER -------------------------------------------
+    # Data is shared between threads without any synchorniztion mechanism, leanding to a potential race condition.
+    # Infinite loop in cusumer with no exist condition causing a zombie thread
+    # Daemon thread allow the problem exit event the threads are still running
+    # I would like use thread-safe data structure like queue.Queue between multiple threads to avoid race condition
+    # It depends on the task or project, mulitple threads got lower momory usage since all threads share the same
+    # memory space and eash for data access because they share the same memory, multiple process like aynsio
+    # allowing parallel execution on multiple CPU and process hold it own memory space.
+    # ========================================================================
+
+
+@addquestion
+def question_5():
+    """ Context Manager for file operations
+
+    The code below uses a context manager for doing file operations, but it has errors.
+    Fix the bugs in the code so that the test passes.
+    """
+
+    # --------------------- ANSWER -------------------------------------------
+    import contextlib
+    
+    HEADER = 'File Header\n'
+    FOOTER = 'File Footer\n'
+    employee_name = 'Maxwell Coupe\n'
+  
+    @contextlib.contextmanager
+    def file_operation(name):
+        try:
+            log_file = name
+            f = open(log_file, 'w')
+            f.write(HEADER)
+            yield f
+        finally:
+            f.write(FOOTER)
+            f.close()
+
+    with file_operation('Employee.txt') as fname:
+        fname.write(employee_name)
+    # ========================================================================
+
+    # Test code
+    file_content = list(line for line in open('Employee.txt', 'r'))
+    assert file_content == [HEADER, employee_name, FOOTER]
+    # ========================================================================
+    # Discussion:
+    # - What are the advantages of using context manager
+    # --------------------- ANSWER -------------------------------------------
+    # Context managers handle setup and teardown automatically.
+    # code easy to read
+    # exception safety
+    # less error, manually open and close file could lead to error like forgot close the file or code not able to reach the close part
+    # ========================================================================
+
+@addquestion    
+def question_6():
+    """
+    Python allows multiple inheritance, and we're trying to make a clean object design below.
+    However, it's not working! ARGH! Fix up the code so that the tests pass.
+    """
+
+    # --------------------- ANSWER -------------------------------------------
+    class Person(object):
+        def __init__(self, name=None, email=None):
+            self.name = name
+            self.email = email
+
+    class Customer(object):
+        def __init__(self, customer_id=None, *args, **kwargs):
+            super(Customer, self).__init__(*args, **kwargs)
+            self.customer_id = customer_id
+
+    class Employee(Customer, Person):
+        def __init__(self, employee_id=None, *args, **kwargs):
+            super(Employee, self).__init__(*args, **kwargs)
+            self.employee_id = employee_id
+
+    # ========================================================================
+    x = Employee(
+        name='Jane Smith', email='jane@smith.com', customer_id=999999999, employee_id=123456789
+    )
+
+    assert x.employee_id == 123456789
+    assert x.customer_id == 999999999
+    assert x.name == 'Jane Smith'
+    assert x.email == 'jane@smith.com'
+
+    # Discussion:
+    # - Very briefly, just a sentence or two, explain why the code was broken.
+    # - What guidelines would you give to your team about designing object hierarchies?
+    # - What are your opinions on OOP versus procedural code?
+    # --------------------- ANSWER -------------------------------------------
+    # use super correctly to make sure all parent class are initalized, 
+    # avoid use multiple inheritance when possible increase the readability for the design
+    # only use it when necessary and clear relation ship, like this should be customer inheritance from person
+    # and employee inheritance from person, if some how employee_id customer_id need access from both class put it into person class
+    # OOP ideal for complex large scale application due to it abilit to model entitites, promote code reuse and manage complexisty code base
+    # prodedural code more suible for simpler, samle programs and scripting and doesn't need many copies of instance, easy and quicker to run and read.
+    # ========================================================================
+
+
+
+@addquestion
+def question_7():
+    """Please identify the issue with the function below. Explain why one of the tests is
+    failing. Once you identify the problem please explain what the issue is, and provide the best
+    possible solution to pass the test.
+    """
+    # --------------------- ANSWER -------------------------------------------
+    def foo(bar=None) -> list:
+        bar = [] if not bar else bar 
+        bar.append("baz")
+        return bar
+    # ========================================================================
+    foo()
+    result = foo(bar=["hello", "world"])
+    assert len(foo()) == 1, f'Bar contains more than one "baz". It contains {len(foo())}!'
+    assert len(result) == 3, f'Result does not contain the required words.'
+    # Discussion:
+    # - Very briefly, just a sentence or two, explain why the code is broken.
+    # --------------------- ANSWER -------------------------------------------
+    # default arguments are evaluated once when the function is defined not each time the function called
+    # 
+    #
+    #
+    # ========================================================================
+
+
+@addquestion
+def question_8():
+    """One of the tests below is failing. Provide a fix and explain why the value of C.x is no
+    longer 1, and the value of c.x is still 1 after running the code."""
+    # ========================================================================
+    class A:
+        x = 1
+        def __init__(self):
+            self.x = 1
+
+    class B(A):
+        pass
+
+    class C(A):
+        x = 1
+        def __init__(self):
+            self.x = 1
+
+    B.x = 2
+    A.x = 3
+    c = C()
+    # --------------------- ANSWER -------------------------------------------
+    
+    assert B.x == 2
+    assert C.x == 1
+    assert c.x == 1
+
+    # ========================================================================
+    # Discussion:
+    # C.x refer to the class attribute x of class C, because C inherits from A 
+    # change A.x will affect C.x unless overwrite Class like what I did
+    #
+    #
+    #
+    # ========================================================================
+
+
+######################### TEST ENDS HERE #####################################
+
+
+def main():
+    for name, q in questions.items():
+        try:
+            q()
+            logger.info('Question "%s": tests are passing.', name)
+        except:
+            logger.exception('Question "%s": tests are failing.', name)
+
+
+if __name__ == '__main__':
+    main()

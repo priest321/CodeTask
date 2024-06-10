@@ -1,0 +1,4 @@
+# accidently delete files by git rm <file>
+
+git checkout HEAD -- path/to/files    # Restore a specific file
+git checkout HEAD -- .                # Restore all removed files

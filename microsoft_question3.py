@@ -28,15 +28,17 @@ Merging them into one sorted list:
 **Output:** []
 
 ### Constraints:
-- \( k == lists.length \)
-- \( 0 \leq k \leq 10^4 \)
-- \( 0 \leq lists[i].length \leq 500 \)
-- \( -10^4 \leq lists[i][j] \leq 10^4 \)
+- ( k == lists.length )
+- ( 0 leq k leq 10^4 )
+- ( 0 leq lists[i].length leq 500 )
+- ( -10^4 leq lists[i][j] leq 10^4 )
 - `lists[i]` is sorted in ascending order.
-- The sum of `lists[i].length` will not exceed \( 10^4 \).
+- The sum of `lists[i].length` will not exceed ( 10^4 ).
 
 
 """
+import heapq
+import typing
 
 def merge_all_sort_list(data: list):
     final = []
@@ -47,4 +49,6 @@ def merge_all_sort_list(data: list):
     
 
 assert merge_all_sort_list([[1,4,5],[1,3,4],[2,6]]) == [1,1,2,3,4,4,5,6]
+assert merge_all_sort_list([]) == []
+assert merge_all_sort_list([[]]) == []
 

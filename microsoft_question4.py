@@ -22,17 +22,17 @@ You may not alter the values in the list's nodes, only nodes themselves may be c
 
 """
 
-def Reverse_node(data: list, distance: int):
+def Reverse_node(data: list, distance: int) -> list:
     size: int = len(data)
-    output: list = []
     for i in range(0, size-distance, distance):
         print(i)
         temp = data[i:i+distance]
         temp.reverse()
-        output.extend(temp)
-        print(output)
+        data[i:i+distance] = temp
+        print(data)
 
-    return output+data[-(size%distance):]
+    return data
+
     
 assert Reverse_node([1,2,3,4,5], 2) == [2,1,4,3,5]
 assert Reverse_node([1,2,3,4,5], 3) == [3,2,1,4,5]

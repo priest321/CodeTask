@@ -25,7 +25,6 @@ You may not alter the values in the list's nodes, only nodes themselves may be c
 def Reverse_node(data: list, distance: int) -> list:
     size: int = len(data)
     for i in range(0, size-distance, distance):
-        print(i)
         temp = data[i:i+distance]
         temp.reverse()
         data[i:i+distance] = temp

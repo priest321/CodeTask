@@ -6,24 +6,17 @@ Created on Tue Jul 16 15:11:49 2024
 """
 
 
-class Car:
-    def __init__(self, name):
-        self.name = name
-        
-    def get_name(self):
-        return self.name
-    
-car1 = Car("BYD")
-
-print(car1.get_name())
-print(car1.__class__.__name__)
-
-
 def process(func):
     def warper(*args, **kwargs):
-        result = func(*args, **kwargs)
-        print(f"processing func {func.__name__} with result {result}")
-        return result
+        try:
+            func_name = func.__name__
+            print(f"processing function {func_name}")
+            result = func(*args, **kwargs)
+            if result:
+                print(f"processed function {func_name} with result {result}")
+            return result
+        except Exception as e:
+            print(f"Processing function {func_name} raised error: {e}")
     return warper
 
 @process

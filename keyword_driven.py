@@ -14,9 +14,12 @@ class SeleniumTest:
 
     def navigate_to(self, url=None):
         self.driver.get(url)
-
-    def input_text(self, search_type=None, locator="", text=""):
+       
+    def get_search_func(self, search_type):
         search_func = None
+        if not search_type:
+            raise ValueError("...")
+            
         match search_type:
             case "name":
                 search_func = By.NAME
@@ -34,13 +37,17 @@ class SeleniumTest:
                 search_func = By.CLASS_NAME
             case "css_selector":
                 search_func = By.CSS_SELECTOR
-        
+                
+        return search_func
+                
+    def input_text(self, search_type=None, locator=None, text=None):
+        search_func = self.get_search_func(search_type)
         self.element = self.driver.find_element(search_func, locator)
         self.element.clear()
         self.element.send_keys(text)
 
-    def click_button(self, locator):
-        element = self.driver.find_element(By.NAME, locator)
+    def click_button(self, search_type=None, locator=None):
+        element = self.driver.find_element(self.search_func(search_type), locator)
         element.click()
 
     def press_enter(self):
@@ -69,7 +76,6 @@ test_case = [
     ("PRESS_ENTER", {}),
     ("CLOSE_BROWSER", {})
 ]
-
 
 
 def execute_test_case(test_case):

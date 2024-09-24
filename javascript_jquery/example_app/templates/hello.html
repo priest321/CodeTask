@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabulator Example</title>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Tabulator CSS CDN -->
+    <link href="https://unpkg.com/tabulator-tables@5.4.3/dist/css/tabulator.min.css" rel="stylesheet">
+    
+    <!-- Tabulator JS CDN -->
+    <script src="https://unpkg.com/tabulator-tables@5.4.3/dist/js/tabulator.min.js"></script>
+</head>
+<body>
+	<div style="width:100%;">
+    <div id="example-table"></div>
+	</div>
+
+    <script>
+	$(document).ready(function() {
+    // Sample data
+    var tableData = [
+        {id:1, name:"John Doe", link:"https://www.example.com/john"},
+        {id:2, name:"Jane Smith", link:"https://www.example.com/jane"},
+        {id:3, name:"Bill Turner", link:"https://www.example.com/bill"}
+    ];
+
+    // Initialize Tabulator
+    var table = new Tabulator("#example-table", {
+        data:tableData, // Set the data to display
+        layout:"fitColumns", // Fit columns 	to width of table
+		resizableColumnFit:true,
+        columns:[
+            {title:"ID", field:"id", resizable:true},
+            {title:"Name", field:"name", resizable:true},
+            {title:"Profile Link", field:"link", resizable:true}
+        ],
+    });
+});
+        // Initialize the Tabulator table here
+    </script>
+</body>
+</html>

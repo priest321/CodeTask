@@ -10,7 +10,9 @@ def process(func):
     def warper(*args, **kwargs):
         try:
             func_name = func.__name__
-            print(f"processing function {func_name}")
+            print(f"processing function {func_name} args{type(args)}")
+            args = (k for k in args)
+            print(args)
             result = func(*args, **kwargs)
             if result:
                 print(f"processed function {func_name} with result {result}")
@@ -25,4 +27,4 @@ def get_num_list(num):
 
 
 
-get_num_list(5)
+print(get_num_list(5))

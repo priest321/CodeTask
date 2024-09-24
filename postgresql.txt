@@ -1,0 +1,8 @@
+PostgreSQL: 
+1. change to postgres user sudo -i -u postgres
+2. how to init database: sudo postggresql-setup initdb
+3. login with postgres user: psql -U postgres
+4. connect database by: \connect robatabase;
+5. create table: create table products (product_id serial primary key, product_name varchar(255) not null, prices numeric(10, 2) not null);
+6. insert data: insert into products (product_name, prices) values ('product A', 19.99);
+7. 

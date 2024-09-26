@@ -24,3 +24,14 @@ def get_jumps(start: int, end: int, jump_size:int):
 assert get_jumps(10, 85, 30) == 3
 assert get_jumps(100, 9000, 100) == 89
 assert get_jumps(1, 10, 3) == 3
+
+
+def get_jumps(start, end, distance) -> int:
+    if start > end:
+        return 0
+        
+    travel = (end - start) / distance
+    if int(travel) < travel:
+        return int(travel) + 1
+    else:
+        return int(travel)

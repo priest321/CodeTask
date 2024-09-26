@@ -26,18 +26,15 @@ Write an efficient algorithm for the following assumptions
 
 
 def dominitor(data):
-    dominitor_min = len(data)//2
+    edge = len(data)//2  # compare should bigger t
     mapping = {}
-    
     for d in data:
         if d not in mapping:
             mapping[d] = 1
         else:
             mapping[d] += 1
-        
-        if mapping[d] > dominitor_min:
+        if mapping[d] > edge:
             return d
-            
     return -1
     
 

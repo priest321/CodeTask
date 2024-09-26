@@ -22,3 +22,19 @@ def find_unpaired_element(data: list):
 assert find_unpaired_element([1,1,2,2,3,3,4,4,5]) == 5
 assert find_unpaired_element([1,1,9,4,4,6,7,9,6]) == 7
 assert find_unpaired_element([1,1,9,4,4,6,7,9,7]) == 6
+
+
+def find_unpaired_element(data):
+    if isinstance(data, list):
+        mapping = {}
+        for d in data:
+            if d not in mapping:
+                mapping[d] = 1
+                
+            else:
+                mapping[d] += 1
+        
+        for k, v in mapping.items():
+            if v%2:
+                return k
+    return -1

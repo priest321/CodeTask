@@ -24,34 +24,34 @@ the function may return 0, 2, 4, 6 or 7, as explained above.
 Write an efficient algorithm for the following assumptions
 """
 
-def dominitor(S) -> int:
-	# 1. find out the dominitor condition: "size//2 < dominitor"
-	# 2. count each number if count trigger condition 1 return "dominitor" else return "-1"
+
+def dominitor(data):
+    dominitor_min = len(data)//2
+    mapping = {}
     
-    edge: int = len(S)//2
-    collector: dict = {}
-    
-    for digit in S:
-        if digit not in collect:
-            collect[digit] = 1
+    for d in data:
+        if d not in mapping:
+            mapping[d] = 1
         else:
-            collect[digit] += 1
-            
-        if collector[digit] > edge:
-            return digit
-    return -1
+            mapping[d] += 1
         
+        if mapping[d] > dominitor_min:
+            return d
+            
+    return -1
     
 
 
-assert dominitor([2]) = 2
-assert dominitor([-2]) = -2
+assert dominitor([2]) == 2
+assert dominitor([-2]) == -2
 assert dominitor([3,4,3,2,3,-1,3,3]) == 3
 assert dominitor([3,4,3,2,3,-1,3,3,4]) == 3
 
-assert dominitor([-1]) = -1 
+assert dominitor([-1]) == -1 
 assert dominitor([]) == -1
 assert dominitor([1,2,3,4]) == -1
-assert dominitor([2,1]) = -1
+assert dominitor([2,1]) == -1
 
-
+        
+    
+    

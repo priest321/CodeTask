@@ -11,8 +11,7 @@ def search(data, target):
         else:
             return -1
     return binary_search(data, 0, len(data)-1, target)
-	
-
+    
 
 print(search([1], 1))
 print(search([1,2], 1))
@@ -24,6 +23,7 @@ print(search([1,2,3,4,5,7,8,9,10,11], 6))
 
 
 
+            
 
 
 
